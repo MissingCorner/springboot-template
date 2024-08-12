@@ -1,0 +1,21 @@
+services:
+  # put other prod container to prod group
+  # those services will not start with devcontainer
+  server:
+    profiles: ["prod"]
+  be:
+    container_name: sb-be
+    build:
+      dockerfile: .devcontainer/Dockerfile
+      target: vsc-java-dev
+    image: sb-be-java
+    volumes:
+      # assign tmp/caching folder for dev container to host,
+      # increase time and performance when we need to rebuild container
+      - ~/tmp:/workspace/local/tmp
+      - .:/workspace
+    command: sleep infinity
+    environment:
+      POSTGRES_HOST: host.docker.internal
+    depends_on:
+      - postgres

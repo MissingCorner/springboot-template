@@ -1,0 +1,46 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/python
+{
+  "name": "SpringBoot Java 11",
+  // Features to add to the dev container. More info: https://containers.dev/features.
+  // "features": {},
+  // Use 'forwardPorts' to make a list of ports inside the container available locally.
+  // "forwardPorts": [],
+  // // Use 'postCreateCommand' to run commands after the container is created.
+  // "postCreateCommand": "yarn",
+  // Configure tool-specific properties.
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "naumovs.color-highlight",
+        "vscjava.vscode-java-pack",
+        "vmware.vscode-boot-dev-pack"
+      ],
+      "settings": {
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+          "source.organizeImports": "explicit",
+          "source.fixAll": "explicit"
+        },
+        "editor.defaultFormatter": "redhat.java",
+        "editor.detectIndentation": false,
+        "files.trimTrailingWhitespace": true,
+        "java.compile.nullAnalysis.mode": "automatic",
+        "java.configuration.updateBuildConfiguration": "automatic"
+      }
+    }
+  },
+  // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+  // "remoteUser": "root"
+  "dockerComposeFile": [
+    "../compose.yml",
+    "./compose.yml"
+  ],
+  "service": "be",
+  "workspaceFolder": "/workspace",
+  "features": {
+    "ghcr.io/devcontainers/features/java:1": {
+      "installMaven": "true"
+    }
+  }
+}
