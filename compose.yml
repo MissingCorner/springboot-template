@@ -1,0 +1,54 @@
+name: spring-boot-template
+
+services:
+  postgres:
+    container_name: sb-pg
+    image: postgres:14-alpine
+    restart: unless-stopped
+    deploy:
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          memory: 128Mb
+    ports:
+      - '5432:5432'
+    command: -c shared_buffers=500MB -c fsync=off
+    healthcheck:
+      start_period: 5s
+      test: 'pg_isready'
+    environment:
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - sb_postgres_data:/var/lib/postgresql/data
+    networks:
+      - sb
+
+  server:
+    container_name: sb-api
+    platform: linux/amd64
+    build:
+      dockerfile: Dockerfile
+      context: .
+      target: artifact
+    ports:
+      - '8080:8080'
+    healthcheck:
+      start_period: 5s
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_POST: 5432
+      POSTGRES_USERNAME: postgres
+      POSTGRES_PASSWORD: postgres
+    networks:
+      - sb
+    depends_on:
+      - postgres
+
+
+volumes:
+  sb_postgres_data:
+    driver: local
+
+networks:
+  sb:
